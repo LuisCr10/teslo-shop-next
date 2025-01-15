@@ -1,21 +1,36 @@
-import type { CartProduct } from '@/interfaces'
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import type { CartProduct } from "@/interfaces";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+// Función externa para calcular el resumen del carrito
+const calculateSummaryInformation = (cart: CartProduct[]) => {
+  const subTotal = cart.reduce(
+    (subTotal, product) => product.quantity * product.price + subTotal,
+    0
+  );
+  const tax = subTotal * 0.15;
+  const total = subTotal + tax;
+  const itemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
+
+  return { subTotal, tax, total, itemsInCart };
+};
 
 interface State {
-  cart: CartProduct[]
+  cart: CartProduct[];
 
-  getTotalItems: () => number
+  getTotalItems: () => number;
   getSummaryInformation: () => {
-    subTotal: number
-    tax: number
-    total: number
-    itemsInCart: number
-  }
+    subTotal: number;
+    tax: number;
+    total: number;
+    itemsInCart: number;
+  };
 
-  addProductToCart: (product: CartProduct) => void
-  updateProductQuantity: (product: CartProduct, quantity: number) => void
-  removeProduct: (product: CartProduct) => void
+  addProductTocart: (product: CartProduct) => void;
+  updateProductQuantity: (product: CartProduct, quantity: number) => void;
+  removeProduct: (product: CartProduct) => void;
+
+  clearCart: () => void;
 }
 
 export const useCartStore = create<State>()(
@@ -23,84 +38,72 @@ export const useCartStore = create<State>()(
     (set, get) => ({
       cart: [],
 
-      // Methods
+      // Obtener el total de artículos en el carrito
       getTotalItems: () => {
-        const { cart } = get()
-        return cart.reduce((total, item) => total + item.quantity, 0)
+        const { cart } = get();
+        return cart.reduce((total, item) => total + item.quantity, 0);
       },
 
+      // Obtener el resumen del carrito
       getSummaryInformation: () => {
-        const { cart } = get()
-
-        const subTotal = cart.reduce(
-          (subTotal, product) => product.quantity * product.price + subTotal,
-          0
-        )
-        const tax = subTotal * 0.15
-        const total = subTotal + tax
-        const itemsInCart = cart.reduce(
-          (total, item) => total + item.quantity,
-          0
-        )
-
-        return {
-          subTotal,
-          tax,
-          total,
-          itemsInCart
-        }
+        const { cart } = get();
+        return calculateSummaryInformation(cart);
       },
 
-      addProductToCart: (product: CartProduct) => {
-        const { cart } = get()
+      // Agregar producto al carrito
+      addProductTocart: (product: CartProduct) => {
+        const { cart } = get();
 
-        // 1. Revisar si el producto existe en el carrito con la talla seleccionada
         const productInCart = cart.some(
           (item) => item.id === product.id && item.size === product.size
-        )
+        );
 
         if (!productInCart) {
-          set({ cart: [...cart, product] })
-          return
+          set({ cart: [...cart, product] });
+          return;
         }
 
-        // 2. Se que el producto existe por talla... tengo que incrementar
         const updatedCartProducts = cart.map((item) => {
           if (item.id === product.id && item.size === product.size) {
-            return { ...item, quantity: item.quantity + product.quantity }
+            return { ...item, quantity: item.quantity + product.quantity };
           }
+          return item;
+        });
 
-          return item
-        })
-
-        set({ cart: updatedCartProducts })
+        set({ cart: updatedCartProducts });
       },
 
+      // Actualizar la cantidad de un producto
       updateProductQuantity: (product: CartProduct, quantity: number) => {
-        const { cart } = get()
+        const { cart } = get();
 
         const updatedCartProducts = cart.map((item) => {
           if (item.id === product.id && item.size === product.size) {
-            return { ...item, quantity: quantity }
+            return { ...item, quantity: quantity };
           }
-          return item
-        })
+          return item;
+        });
 
-        set({ cart: updatedCartProducts })
+        set({ cart: updatedCartProducts });
       },
 
+      // Eliminar un producto del carrito
       removeProduct: (product: CartProduct) => {
-        const { cart } = get()
+        const { cart } = get();
         const updatedCartProducts = cart.filter(
           (item) => item.id !== product.id || item.size !== product.size
-        )
+        );
 
-        set({ cart: updatedCartProducts })
-      }
+        set({ cart: updatedCartProducts });
+      },
+
+      // Limpiar el carrito
+      clearCart: () => {
+        set({ cart: [] });
+      },
     }),
-
     {
-      name: 'shopping-cart'
+      name: "shopping-cart", // Nombre para el almacenamiento persistente
     }
   )
-)
+);

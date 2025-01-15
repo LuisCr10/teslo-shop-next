@@ -24,7 +24,7 @@ export const OrderSummary = () => {
     if (itemsInCart === 0 && loaded === true) {
       router.replace('/empty')
     }
-  }, [itemsInCart, loaded, router])
+  }, [itemsInCart, loaded])
 
   if (!loaded) return <p>Loading...</p>
 
