@@ -5,8 +5,13 @@
 export * from './products/product-grid/ProductGrid';
 export * from './products/product-grid/ProductGridItem';
 
+export * from './orders/OrderStatus';
 
-export * from './provider/Provider';
+
+export * from './paypal/PayPalButton'
+
+
+export * from './providers/Providers';
 
 
 export * from './product/slideshow/ProductSlideshow';
