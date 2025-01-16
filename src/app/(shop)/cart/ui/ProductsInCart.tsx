@@ -1,8 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-import Image from 'next/image';
-
 import { useCartStore } from '@/store';
 import { ProductImage, QuantitySelector } from '@/components';
 import Link from 'next/link';
@@ -19,8 +17,9 @@ export const ProductsInCart = () => {
 
 
   useEffect(() => {
-    setLoaded(true) ;
-  });
+    setLoaded(true);
+  }, []); // Array vacío, para ejecutar solo una vez
+  
 
   if( !loaded ) {
     return <p>Loading...</p>

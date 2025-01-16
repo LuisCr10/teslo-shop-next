@@ -37,6 +37,7 @@ export default function OrdersPage() {
       </div>
 
       <div className="mb-10">
+      <p>Current page: {currentPage}</p>
         <table className="min-w-full">
           <thead className="bg-gray-200 border-b">
             <tr>

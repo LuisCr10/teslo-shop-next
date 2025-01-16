@@ -18,8 +18,9 @@ export const ProductsInCart = () => {
 
 
   useEffect(() => {
-    setLoaded(true) ;
-  });
+    setLoaded(true);
+  }, []); // Array vacío, para ejecutar solo una vez
+  
 
 
 

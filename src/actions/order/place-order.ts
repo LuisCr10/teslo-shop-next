@@ -112,10 +112,10 @@ export const placeOrder = async (
       ok: true,
       order: prismaTx.order,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       ok: false,
-      message: error.message || "Error inesperado",
+      message: (error instanceof Error ? error.message : "Error inesperado"),
     };
   }
 };

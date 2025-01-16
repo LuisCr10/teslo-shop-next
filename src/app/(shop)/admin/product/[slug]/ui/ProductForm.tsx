@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { Category, Product, ProductImage as ProductWithImage } from "@/interfaces";
-import Image from "next/image";
+
 import clsx from "clsx";
 import { createUpdateProduct, deleteProductImage } from "@/actions";
 import { useRouter } from 'next/navigation';
@@ -39,7 +39,6 @@ export const ProductForm = ({ product, categories }: Props) => {
     formState: { isValid },
     getValues,
     setValue,
-    watch,
   } = useForm<FormInputs>({
     defaultValues: {
       ...product,
@@ -50,11 +49,17 @@ export const ProductForm = ({ product, categories }: Props) => {
     },
   });
 
-  watch("sizes");
+  console.log(isValid);
+
+  //const sizesWatch = watch("sizes");
 
   const onSizeChanged = (size: string) => {
     const sizes = new Set(getValues("sizes"));
-    sizes.has(size) ? sizes.delete(size) : sizes.add(size);
+    if (sizes.has(size)) {
+      sizes.delete(size);
+    } else {
+      sizes.add(size);
+    }
     setValue("sizes", Array.from(sizes));
   };
 

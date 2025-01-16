@@ -9,9 +9,9 @@ declare module 'next-auth' {
       id: string;
       name: string;
       email: string;
-      emailVerified?: boolean;
+      emailVerified: Date | null; // Asegúrate de que no sea opcional aquí
       role: string;
-      image?: string;
+      image?: string | null;
     } & DefaultSession['user'];
   }
 }

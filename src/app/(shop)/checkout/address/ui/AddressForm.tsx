@@ -36,10 +36,11 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
   const router = useRouter();
   const { handleSubmit, register, formState: { isValid }, reset } = useForm<FormInputs>({
     defaultValues: {
-      ...(userStoredAddress as any),
+      ...(userStoredAddress as Address),
       rememberAddress: false,
     }
   });
+  
 
   const { data: session } = useSession({
     required: true,
@@ -51,10 +52,11 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
 
 
   useEffect(() => {
-    if ( address.firstName ) {
-      reset(address)
+    if (address.firstName) {
+      reset(address);
     }
-  },[])
+  }, [address, reset]);
+  
   
 
 

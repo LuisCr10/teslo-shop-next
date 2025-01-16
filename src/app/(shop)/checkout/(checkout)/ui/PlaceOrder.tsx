@@ -23,7 +23,8 @@ export const PlaceOrder = () => {
   const { itemsInCart, subTotal, tax, total } = useMemo(() => {
     const cartStore = useCartStore.getState();
     return cartStore.getSummaryInformation();
-  }, [cart]);
+  }, []);  // Elimina 'cart' como dependencia
+  
 
   useEffect(() => {
     setLoaded(true);
@@ -44,7 +45,7 @@ export const PlaceOrder = () => {
     const resp = await placeOrder( productsToOrder, address);
     if ( !resp.ok ) {
       setIsPlacingOrder(false);
-      setErrorMessage(resp.message);
+      setErrorMessage(resp.message || "");
       return;
     }
 

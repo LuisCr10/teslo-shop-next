@@ -30,6 +30,8 @@ export const changeUserRole = async( userId: string, role: string ) => {
       }
     })
 
+    console.log(user);
+
     revalidatePath('/admin/users');
 
     return {
